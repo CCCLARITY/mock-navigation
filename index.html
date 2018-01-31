@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>模拟导航</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header>你想去哪里，都可以在网页上编辑哦 @_@</header>
+    <main>
+        <div class="wrapper" id="mainX">
+
+        </div>
+    </main>    
+    <footer></footer>
+
+    <script>
+        var keys = {
+            0: ['q','w','e','r','t','y','u','i','o','p'],
+            1: ['a','s','d','f','g','h','j','k','l'],
+            2: ['z','x','c','v','b','n','m'],
+            length: 3
+        };
+
+        var website = {
+            q: 'qq.com',
+            w: 'weibo.com',
+            e: 'ele.me',
+            r: 'renren.com',
+            t: 'taobao.com',
+            y: 'youku.com',
+            u: 'unity3d.com',
+            i: 'iqiyi.com',
+            o: 'office.com',
+            p: 'pan.baidu.com',
+            m: undefined
+        };
+        
+        var websiteLocalStorage = JSON.parse(localStorage.getItem('zzz') || 'null');
+        if(websiteLocalStorage){
+            website = websiteLocalStorage;
+        }
+
+        for(var index=0; index < keys.length; index++){
+            var divKey = document.createElement('div');
+            var mainX = document.getElementById('mainX');
+            mainX.appendChild(divKey);
+            divKey.id = 'div' + index;
+            var row = keys[index]
+
+            for(var index2=0; index2<keys[index].length; index2++){
+                var kbdValue = document.createElement('kbd');
+                var main1 = document.getElementById('div' + index);
+                main1.appendChild(kbdValue);
+                kbdValue.innerText = row[index2];
+
+                // 应该新建一个div，然后把编辑按钮和删除按钮都放进div里再定位。
+                var divButton = document.createElement('div');
+                divButton.className = 'divButton';
+                kbdValue.append(divButton);
+                let aaa = row[index2];
+                
+                
+                // 给每个按钮上添加编辑按钮
+                var editButton = document.createElement('button');
+                divButton.append(editButton);
+                editButton.textContent = 'E';
+                editButton.id = row[index2];
+                editButton.onclick = function(xxx){
+                    var aKey = xxx.target.id;
+                    var text = prompt('请输入一个有效的网址'); //texr用来存储用户输入的这个网址
+                    website[aKey] = text;
+                    console.log(website);
+                    localStorage.setItem('zzz', JSON.stringify(website))
+                }
+
+                // 给每个按钮上添加删除按钮
+                var deleteButton = document.createElement('button');
+                divButton.append(deleteButton);
+                deleteButton.textContent = 'D';
+                deleteButton.id = row[index2];
+                deleteButton.onclick = function(xxx){
+                    var aKey = xxx.target.id;
+                    website[aKey] = '';
+                    console.log(website);
+                    localStorage.setItem('zzz', JSON.stringify(website))
+                }
+            }
+        }
+        
+        document.onkeypress = function(e){
+            var key = e['key'];
+            console.log(key);
+            var web = website[key];
+            console.log(web);
+            
+            if(web){
+                window.open('http://' + web, '_blank');
+            }
+        }
+
+
+    </script>
+</body>
+</html>
